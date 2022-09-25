@@ -1,0 +1,101 @@
+---
+title: "P8105 HW 1 EP3045"
+output: html_document
+date: "2022-09-23"
+---
+
+#Problem 1
+
+```{r include = FALSE}
+library(tidyverse)
+library(ggplot2)
+
+```
+
+```{r load penguin dataset}
+library(palmerpenguins)
+data("penguins", package = "palmerpenguins")
+```
+
+The names: 
+`r names(penguins)`.
+
+The unique *species*: 
+`r unique(penguins$species)`.
+
+The unique *islands*: 
+`r unique(penguins$island)`.
+
+The unique *years*: 
+`r unique(penguins$year, na.rm = TRUE)`.
+
+The *sex* of the penguins: 
+`r unique(na.omit(penguins$sex))`.
+
+The mean for *bill length* is `r round(mean(pull(penguins, bill_length_mm), na.rm = TRUE), digits = 2)`mm, and the standard deviation is `r round(sd(pull(penguins, bill_length_mm), na.rm = TRUE), digits = 2)`.
+
+The mean for *bill depth* is `r round(mean(pull(penguins, bill_depth_mm), na.rm = TRUE), digits = 2)`mm, and the standard deviation is `r round(sd(pull(penguins, bill_depth_mm), na.rm = TRUE), digits=2)`.
+
+The mean for *body mass* is `r round(mean(pull(penguins, body_mass_g), na.rm = TRUE), digits=2)`mm, and the standard deviation is `r round(sd(pull(penguins, body_mass_g), na.rm = TRUE), digits=2)`.
+
+The mean for *flipper length* is `r round(mean(pull(penguins, flipper_length_mm),na.rm = TRUE))`mm, and the standard deviation is `r round(sd(pull(penguins, flipper_length_mm), na.rm = TRUE), digits=2)`.
+
+There are `r nrow(penguins)` *rows* and `r ncol(penguins)` *columns* in this dataset.
+
+#### Creating a scatter plot
+
+```{r create scatter plot, message = FALSE, warning = FALSE}
+ggplot(penguins,aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point() + ggtitle("Flipper Length vs Bill Length")
+
+#This is the scatter plot for Flipper versus Bill Length.
+``` 
+#### Saving the scatter plot
+
+```{r save scatter plot, message = FALSE, warning = FALSE}
+ggsave("penguin_scatter.pdf", plot = last_plot(), height = 4, width = 6)
+```
+
+This saves the scatter plot as a pdf file names penguin_scatter_plot.
+
+
+#### Creating a data frame that consists of numeric, logical, character, and factor vectors.
+
+```{r creating data frame}
+set.seed(420)
+data_table <- tibble(
+  my_variable = rnorm(10),
+  logical_vec = my_variable > 0,
+  ten_char_vector = c("s", "t", "r", "a", "w", "b", "e", "r", "r", "y"),
+  three_levels = factor(c("small", "medium", "large", "large", "medium", "small", "medium", "small", "large", "medium"))
+)
+data_table
+```
+
+#### Attempting to take the means of the variables
+
+```{r finding mean of the variables}
+mean(pull(data_table, my_variable))
+mean(pull(data_table, logical_vec))
+mean(pull(data_table, ten_char_vector))
+mean(pull(data_table, three_levels))
+```
+
+The variables "my_variable" and "logical_vec" are numeric and logical vectors. Because of this, we are able to calculate their means. The variables "ten_char_vector" and "three_levels" are character and factor vectors. Because of this, we cannot calculate their means. 
+
+#### Converting logicial, character, and factor variables using as.numeric without showing the outputs
+
+```{r converting to variables to numeric, message = FALSE, warning = FALSE}
+converted_num1 = as.numeric(pull(data_table, logical_vec))
+converted_num2 = as.numeric(pull(data_table, ten_char_vector))
+converted_num3 = as.numeric(pull(data_table, three_levels))
+```
+
+#### Finding the means of the converted variables
+
+```{r finding converted mean}
+mean(converted_num1)
+mean(converted_num2)
+mean(converted_num3)
+```
+
+We are able to convert logical and factor vectors into numeric values, but we are not able to convert character values into numeric values. The logical vector can be converted into a numeric value by assigning 0 to FALSE and 1 to TRUE. With this knowledge, I was able to convert the variables "logical_vec", "ten_char_vector", and "three_levels" into numeric values. Because "ten_char_vector" is a character vector, I cannot convert it into numeric variables. 
